@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
+from tensorflow.keras.preprocessing import image
 
 # Function to create the model
 def create_model():
@@ -84,6 +85,7 @@ def visualize_eda(train_ds):
 
 # Function to plot training history
 def plot_history(history):
+    st.subheader("Loss/accuracy curve")
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
     # Plot the loss curves on the first subplot
     ax1.plot(history.history['loss'], label='training loss')
@@ -123,7 +125,32 @@ def display_confusion_matrix(model, test_ds):
     ax.set_ylabel('True labels')
     st.pyplot(fig)
 
+def image_upload_predict(model):
+    uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+    if uploaded_file is not None:
+        # Read the uploaded image
+        image_content = uploaded_file.read()
+        image_array = image.img_to_array(image.load_img(image_content, target_size=(64, 64)))
+        image_array = np.expand_dims(image_array, axis=0)
 
+        # Make predictions using your model
+        result = model.predict(image_array)
+        
+        # Assuming you have defined NUM_CLASSES somewhere in your code
+        NUM_CLASSES = 5  # Replace with the actual number of classes
+
+        # Extract the predicted class index
+        predicted_class = np.argmax(result, axis=1)
+
+        # Map the predicted class index to the corresponding label/category
+        class_labels = ['Beaches', 'Oceans', 'Forests', 'Sunsets', 'Architecture']
+
+        # Ensure the predicted_class is within the valid range
+        if 0 <= predicted_class < NUM_CLASSES:
+            prediction = class_labels[predicted_class[0]]  # Extract the scalar value from the array
+            st.write("Prediction:", prediction)
+        else:
+            st.write("Invalid predicted class index.")
 
 # Streamlit app
 def main():
@@ -186,6 +213,8 @@ def main():
 
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
+
+        image_upload_predict(model)
 
 if __name__ == "__main__":
     main()
