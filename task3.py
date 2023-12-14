@@ -32,7 +32,6 @@ def create_model():
     ])
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    model.save("model.keras")
     return model
 
 # Function to train the model
