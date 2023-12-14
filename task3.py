@@ -57,8 +57,9 @@ def visualize_eda(train_ds):
 
 # Function to plot training history
 def plot_history(history):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-    print(history.history['loss'])
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10,5))
+
+    # Plot the loss curves on the first subplot
     ax1.plot(history.history['loss'], label='training loss')
     ax1.plot(history.history['val_loss'], label='validation loss')
     ax1.set_title('Loss curves')
@@ -66,6 +67,7 @@ def plot_history(history):
     ax1.set_ylabel('Loss')
     ax1.legend()
 
+    # Plot the accuracy curves on the second subplot
     ax2.plot(history.history['accuracy'], label='training accuracy')
     ax2.plot(history.history['val_accuracy'], label='validation accuracy')
     ax2.set_title('Accuracy curves')
@@ -73,8 +75,11 @@ def plot_history(history):
     ax2.set_ylabel('Accuracy')
     ax2.legend()
 
+    # Adjust the spacing between subplots
     fig.tight_layout()
-    st.pyplot()
+
+    # Show the figure
+    plt.show()
 
 # Streamlit app
 def main():
