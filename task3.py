@@ -155,7 +155,7 @@ def main():
         # Plot training history
         plot_history(history)
         
-        display_confusion_matrix(model, test_ds)
+        
 
         st.sidebar.text("Training complete!")
 
@@ -166,7 +166,8 @@ def main():
             batch_size=batch_size,
             image_size=image_size,
         )
-    
+        display_confusion_matrix(model, test_ds)
+        
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
 
