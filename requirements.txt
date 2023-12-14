@@ -1,0 +1,9 @@
+# requirements.txt
+
+# TensorFlow with GPU support
+tensorflow-gpu==2.7.0
+
+# Other dependencies
+streamlit==1.18.0
+matplotlib==3.4.3
+numpy==1.21.2
