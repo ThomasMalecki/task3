@@ -131,8 +131,8 @@ def image_upload_predict(model, file):
     if file is not None:
         # Read the uploaded image
         image_content = file.read()
-        image_array = image.img_to_array(image.load_img(io.BytesIO(image_content), target_size=(64, 64)))
-        image_array = np.expand_dims(image_array, axis=0)
+        image_pil = Image.open(io.BytesIO(image_content))
+        image_array = image.img_to_array(image_pil)
 
         # Make predictions using your model
         result = model.predict(image_array)
