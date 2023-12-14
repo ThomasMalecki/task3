@@ -38,7 +38,7 @@ def train_model(model, train_ds, validation_ds, epochs):
     for epoch in range(epochs):
         progress_text = st.sidebar.empty() 
         # Your existing training code...
-        history = model.fit(train_ds, validation_data=validation_ds, steps_per_epoch = len(train_ds), epochs=epochs)
+        history = model.fit(train_ds, validation_data=validation_ds, epochs=epochs)
 
         # Callback to update the progress in the Streamlit sidebar
         progress_text.text(f"Training epoch: {epoch + 1}/{epochs}")
