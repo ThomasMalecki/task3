@@ -117,18 +117,18 @@ def main():
         plot_history(history)
 
         st.sidebar.text("Training complete!")
-
-    # Evaluate the model on the test set
-    test_ds = image_dataset_from_directory(
-        directory='dataset/test',
-        labels='inferred',
-        label_mode='categorical',
-        batch_size=batch_size,
-        image_size=image_size,
-    )
-    test_loss, test_acc = model.evaluate(test_ds)
-    st.write(f'Test Accuracy: {test_acc:.2%}')
-    st.write(f'Test Loss: {test_loss:.2%}')
+        test_ds = image_dataset_from_directory(
+            directory='dataset/test',
+            labels='inferred',
+            label_mode='categorical',
+            batch_size=batch_size,
+            image_size=image_size,
+        )
     
+        test_loss, test_acc = model.evaluate(test_ds)
+        st.write(f'Test Accuracy: {test_acc:.2%}')
+        st.write(f'Test Loss: {test_loss:.2%}')
+
+
 if __name__ == "__main__":
     main()
