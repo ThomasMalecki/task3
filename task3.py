@@ -117,7 +117,7 @@ def main():
         st.sidebar.text("Training in progress...")
         model = create_model()
         history = train_model(model, train_ds, validation_ds, epochs)
-
+        print(history)
         # Visualize EDA and sample images
         visualize_eda(train_ds)
 
