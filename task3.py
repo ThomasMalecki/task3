@@ -32,7 +32,7 @@ def create_model():
     ])
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
+    model.save("model.keras")
     return model
 
 # Function to train the model
@@ -50,6 +50,7 @@ def train_model(model, train_ds, validation_ds, epochs):
         # Callback to update the progress in the Streamlit sidebar
         progress_text.text(f"Training epoch: {epoch + 1}/{epochs}")
 
+    
     return history
 
 def get_class_counts(dataset):
@@ -125,11 +126,11 @@ def display_confusion_matrix(model, test_ds):
     ax.set_ylabel('True labels')
     st.pyplot(fig)
 
-def image_upload_predict(model):
-    uploaded_file = st.file_uploader("Choose an image...", type="jpg")
-    if uploaded_file is not None:
+def image_upload_predict(model, file):
+
+    if file is not None:
         # Read the uploaded image
-        image_content = uploaded_file.read()
+        image_content = file.read()
         image_array = image.img_to_array(image.load_img(image_content, target_size=(64, 64)))
         image_array = np.expand_dims(image_array, axis=0)
 
@@ -187,7 +188,7 @@ def main():
     st.sidebar.header("Model Training Controls")
     epochs = st.sidebar.slider("Number of Epochs", 1, 25, 13)
     train_button = st.sidebar.button("Train Model")
-
+    file = st.file_uploader("Choose an image...", type="jpg")
     # Create and train the model when the button is clicked
     if train_button:
         st.sidebar.text("Training in progress...")
@@ -215,7 +216,7 @@ def main():
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
 
-    image_upload_predict(model)
+        image_upload_predict(file)
 
 if __name__ == "__main__":
     main()
