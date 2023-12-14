@@ -191,6 +191,7 @@ def main():
     # Create and train the model when the button is clicked
     if train_button:
         st.sidebar.text("Training in progress...")
+
         model = create_model()
         history = train_model(model, train_ds, validation_ds, epochs)
         
@@ -214,7 +215,8 @@ def main():
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
 
-        image_upload_predict(model)
+    image_upload_predict(model)
 
 if __name__ == "__main__":
     main()
+
