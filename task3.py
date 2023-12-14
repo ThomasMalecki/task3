@@ -51,8 +51,21 @@ def train_model(model, train_ds, validation_ds, epochs):
 
     return history
 
+def get_class_counts(dataset):
+    class_counts = dict()
+    class_labels = ['Beaches', 'Oceans', 'Forests', 'Sunsets', 'Architecture']
+    for _, labels in dataset:
+        class_indices = np.argmax(labels, axis=1)
+
+        for class_index in class_indices:
+            class_name = class_labels[class_index]  # Replace with your class names
+            class_counts[class_name] = class_counts.get(class_name, 0) + 1
+
+    return class_counts
+
 # Function to visualize EDA and sample images
 def visualize_eda(train_ds):
+    st.subheader("EDA")
     fig, axes = plt.subplots(3, 3, figsize=(10, 10))
 
     for images, labels in train_ds.take(1):
@@ -63,10 +76,15 @@ def visualize_eda(train_ds):
     # Instead of plt.show(), use st.pyplot(fig) to display the figure in Streamlit
     st.pyplot(fig)
 
+    # Display class names and counts
+    class_counts = get_class_counts(train_ds)
+    st.subheader("Class Counts in Training Dataset:")
+    for class_name, count in class_counts.items():
+        st.write(f"Class: {class_name}, Count: {count}")
+
 # Function to plot training history
 def plot_history(history):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-
     # Plot the loss curves on the first subplot
     ax1.plot(history.history['loss'], label='training loss')
     ax1.plot(history.history['val_loss'], label='validation loss')
@@ -154,8 +172,6 @@ def main():
 
         # Plot training history
         plot_history(history)
-        
-        
 
         st.sidebar.text("Training complete!")
 
@@ -167,7 +183,7 @@ def main():
             image_size=image_size,
         )
         display_confusion_matrix(model, test_ds)
-        
+
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
 
