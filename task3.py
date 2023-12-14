@@ -102,16 +102,21 @@ def main():
     # Sidebar controls
     st.sidebar.header("Model Training Controls")
     epochs = st.sidebar.slider("Number of Epochs", 1, 50, 20)
+    train_button = st.sidebar.button("Train Model")
 
-    # Create and train the model
-    model = create_model()
-    history = train_model(model, train_ds, validation_ds, epochs)
+    # Create and train the model when the button is clicked
+    if train_button:
+        st.sidebar.text("Training in progress...")
+        model = create_model()
+        history = train_model(model, train_ds, validation_ds, epochs)
 
-    # Visualize EDA and sample images
-    visualize_eda(train_ds)
+        # Visualize EDA and sample images
+        visualize_eda(train_ds)
 
-    # Plot training history
-    plot_history(history)
+        # Plot training history
+        plot_history(history)
+
+        st.sidebar.text("Training complete!")
 
     # Evaluate the model on the test set
     test_ds = image_dataset_from_directory(
@@ -123,6 +128,7 @@ def main():
     )
     test_loss, test_acc = model.evaluate(test_ds)
     st.write(f'Test Accuracy: {test_acc:.2%}')
-
+    st.write(f'Test Loss: {test_loss:.2%}')
+    
 if __name__ == "__main__":
     main()
