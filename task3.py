@@ -47,13 +47,15 @@ def train_model(model, train_ds, validation_ds, epochs):
 
 # Function to visualize EDA and sample images
 def visualize_eda(train_ds):
-    plt.figure(figsize=(10, 10))
+    fig, axes = plt.subplots(3, 3, figsize=(10, 10))
+
     for images, labels in train_ds.take(1):
-        for i in range(9):
-            ax = plt.subplot(3, 3, i + 1)
-            plt.imshow(images[i].numpy().astype("uint8"))
-            plt.axis("off")
-    st.pyplot()
+        for i, ax in enumerate(axes.flat):
+            ax.imshow(images[i].numpy().astype("uint8"))
+            ax.axis("off")
+
+    # Instead of plt.show(), use st.pyplot(fig) to display the figure in Streamlit
+    st.pyplot(fig)
 
 # Function to plot training history
 def plot_history(history):
@@ -114,7 +116,7 @@ def main():
 
     # Sidebar controls
     st.sidebar.header("Model Training Controls")
-    epochs = st.sidebar.slider("Number of Epochs", 1, 50, 20)
+    epochs = st.sidebar.slider("Number of Epochs", 1, 25, 13)
     train_button = st.sidebar.button("Train Model")
 
     # Create and train the model when the button is clicked
