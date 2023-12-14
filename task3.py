@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
 from tensorflow.keras.preprocessing import image
+import io
 
 # Function to create the model
 def create_model():
@@ -130,12 +131,12 @@ def image_upload_predict(model, file):
     if file is not None:
         # Read the uploaded image
         image_content = file.read()
-        image_array = image.img_to_array(image.load_img(image_content, target_size=(64, 64)))
+        image_array = image.img_to_array(image.load_img(io.BytesIO(image_content), target_size=(64, 64)))
         image_array = np.expand_dims(image_array, axis=0)
 
         # Make predictions using your model
         result = model.predict(image_array)
-        
+
         # Assuming you have defined NUM_CLASSES somewhere in your code
         NUM_CLASSES = 5  # Replace with the actual number of classes
 
