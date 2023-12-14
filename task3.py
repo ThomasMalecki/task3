@@ -128,31 +128,42 @@ def display_confusion_matrix(model, test_ds):
     st.pyplot(fig)
 
 def image_upload_predict(model, file):
-
     if file is not None:
-        # Read the uploaded image
-        image_content = file.read()
-        image_pil = Image.open(io.BytesIO(image_content))
-        image_array = image.img_to_array(image_pil)
+        try:
+            # Read the uploaded image
+            image_content = file.read()
+            image_pil = Image.open(io.BytesIO(image_content))
+            image_array = image.img_to_array(image_pil)
 
-        # Make predictions using your model
-        result = model.predict(image_array)
+            # Check and preprocess the input shape to match the model's expectations
+            expected_shape = model.input_shape[1:3]  # Assuming (height, width) input shape
+            if image_array.shape[:2] != expected_shape:
+                st.warning(f"Warning: Image shape {image_array.shape[:2]} does not match the expected shape {expected_shape}. Resizing may be necessary.")
+                image_array = tf.image.resize(image_array, expected_shape)
 
-        # Assuming you have defined NUM_CLASSES somewhere in your code
-        NUM_CLASSES = 5  # Replace with the actual number of classes
+            # Make predictions using your model
+            result = model.predict(np.expand_dims(image_array, axis=0))
 
-        # Extract the predicted class index
-        predicted_class = np.argmax(result, axis=1)
+            # Assuming you have defined NUM_CLASSES somewhere in your code
+            NUM_CLASSES = 5  # Replace with the actual number of classes
 
-        # Map the predicted class index to the corresponding label/category
-        class_labels = ['Beaches', 'Oceans', 'Forests', 'Sunsets', 'Architecture']
+            # Extract the predicted class index
+            predicted_class = np.argmax(result, axis=1)
 
-        # Ensure the predicted_class is within the valid range
-        if 0 <= predicted_class < NUM_CLASSES:
-            prediction = class_labels[predicted_class[0]]  # Extract the scalar value from the array
-            st.write("Prediction:", prediction)
-        else:
-            st.write("Invalid predicted class index.")
+            # Map the predicted class index to the corresponding label/category
+            class_labels = ['Beaches', 'Oceans', 'Forests', 'Sunsets', 'Architecture']
+
+            # Ensure the predicted_class is within the valid range
+            if 0 <= predicted_class[0] < NUM_CLASSES:
+                prediction = class_labels[predicted_class[0]]  # Extract the scalar value from the array
+                st.write("Prediction:", prediction)
+            else:
+                st.write("Invalid predicted class index.")
+
+        except Exception as e:
+            st.error(f"Error during prediction: {str(e)}")
+            # You can print more detailed error information for debugging purposes
+            # print(traceback.format_exc())
 
 # Streamlit app
 def main():
