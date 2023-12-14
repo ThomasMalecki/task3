@@ -8,6 +8,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
 from tensorflow.keras.preprocessing import image
 import io
+from PIL import Image
 
 # Function to create the model
 def create_model():
