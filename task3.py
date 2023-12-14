@@ -188,7 +188,8 @@ def main():
     st.sidebar.header("Model Training Controls")
     epochs = st.sidebar.slider("Number of Epochs", 1, 25, 13)
     train_button = st.sidebar.button("Train Model")
-    file = st.file_uploader("Choose an image...", type="jpg")
+    file = st.sidebar.file_uploader("Choose an image...", type="jpg")
+
     # Create and train the model when the button is clicked
     if train_button:
         st.sidebar.text("Training in progress...")
@@ -216,7 +217,7 @@ def main():
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
 
-        image_upload_predict(file)
+        image_upload_predict(model, file)
 
 if __name__ == "__main__":
     main()
