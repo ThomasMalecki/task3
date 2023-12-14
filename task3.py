@@ -58,7 +58,7 @@ def visualize_eda(train_ds):
 # Function to plot training history
 def plot_history(history):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-
+    print(history.history['loss'])
     ax1.plot(history.history['loss'], label='training loss')
     ax1.plot(history.history['val_loss'], label='validation loss')
     ax1.set_title('Loss curves')
@@ -117,7 +117,7 @@ def main():
         st.sidebar.text("Training in progress...")
         model = create_model()
         history = train_model(model, train_ds, validation_ds, epochs)
-        print(history)
+        
         # Visualize EDA and sample images
         visualize_eda(train_ds)
 
