@@ -4,6 +4,8 @@ from tensorflow.keras import layers
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.metrics import confusion_matrix, classification_report
+import seaborn as sns
 
 # Function to create the model
 def create_model():
@@ -87,6 +89,24 @@ def plot_history(history):
     # Display the Matplotlib figure in Streamlit
     st.pyplot(fig)
 
+def display_confusion_matrix(model, test_ds):
+    true_labels = np.concatenate([y for x, y in test_ds], axis=0)
+    predicted_probs = model.predict(test_ds)
+    predicted_labels = np.argmax(predicted_probs, axis=1)
+
+    # Calculate confusion matrix
+    conf_matrix = confusion_matrix(np.argmax(true_labels, axis=1), predicted_labels)
+
+    # Display confusion matrix using seaborn heatmap with colors
+    st.subheader("Confusion Matrix:")
+    fig, ax = plt.subplots(figsize=(8, 6))
+    sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", ax=ax)
+    ax.set_xlabel('Predicted labels')
+    ax.set_ylabel('True labels')
+    st.pyplot(fig)
+
+
+
 # Streamlit app
 def main():
     st.title("Image Classification Streamlit App")
@@ -134,6 +154,8 @@ def main():
 
         # Plot training history
         plot_history(history)
+        
+        display_confusion_matrix(model, test_ds)
 
         st.sidebar.text("Training complete!")
 
