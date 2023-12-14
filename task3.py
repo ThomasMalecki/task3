@@ -73,8 +73,8 @@ def plot_history(history):
     ax2.set_ylabel('Accuracy')
     ax2.legend()
 
-    # Pass the Matplotlib figure object to st.pyplot()
-    st.pyplot(fig)
+    fig.tight_layout()
+    st.pyplot()
 
 # Streamlit app
 def main():
