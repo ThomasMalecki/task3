@@ -34,7 +34,15 @@ def create_model():
 
 # Function to train the model
 def train_model(model, train_ds, validation_ds, epochs):
-    history = model.fit(train_ds, validation_data=validation_ds, epochs=epochs)
+    
+    for epoch in range(epochs):
+        progress_text = st.sidebar.empty() 
+        # Your existing training code...
+        history = model.fit(train_ds, validation_data=validation_ds, epochs=1)
+
+        # Callback to update the progress in the Streamlit sidebar
+        progress_text.text(f"Training epoch: {epoch + 1}/{epochs}")
+
     return history
 
 # Function to visualize EDA and sample images
@@ -127,7 +135,6 @@ def main():
     
         test_loss, test_acc = model.evaluate(test_ds)
         st.write(f'Test Accuracy: {test_acc:.2%}')
-        st.write(f'Test Loss: {test_loss:.2%}')
 
 
 if __name__ == "__main__":
