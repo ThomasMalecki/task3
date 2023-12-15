@@ -138,7 +138,6 @@ def image_upload_predict(model, file):
             # Check and preprocess the input shape to match the model's expectations
             expected_shape = model.input_shape[1:3]  # Assuming (height, width) input shape
             if image_array.shape[:2] != expected_shape:
-                st.warning(f"Warning: Image shape {image_array.shape[:2]} does not match the expected shape {expected_shape}. Resizing may be necessary.")
                 image_array = tf.image.resize(image_array, expected_shape)
 
             # Make predictions using your model
@@ -199,8 +198,9 @@ def main():
     # Sidebar controls
     st.sidebar.header("Model Training Controls")
     epochs = st.sidebar.slider("Number of Epochs", 1, 25, 13)
-    train_button = st.sidebar.button("Train Model")
     file = st.sidebar.file_uploader("Choose an image...", type="jpg")
+    train_button = st.sidebar.button("Train and Predict")
+    
 
     # Create and train the model when the button is clicked
     if train_button:
